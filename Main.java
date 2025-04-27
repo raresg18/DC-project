@@ -74,6 +74,21 @@ class GUI {
                     resultLabel.setText("Result: " + resultSum);
                      */
 
+                     //MATRIX MULTIPLICATION
+                     Stopwatch stopwatch = new Stopwatch();
+                     double[][] matrixA = reader.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\MatrixMultiplication\\src\\matrixA.txt");
+                     double[][] matrixB = reader.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\MatrixMultiplication\\src\\matrixB.txt");
+
+                     double[][] matrixC = operationTest.multiply(matrixA, matrixB);
+                     double elapsedTime = stopwatch.getElapsedTime();
+
+                     String resultTime = (String.format("%.9f", elapsedTime));
+
+                     timeLabel.setText("Time: " + resultTime);
+                     resultLabel.setText("Result: " + resultSum);
+
+                     reader.displayMatrix(matrixC,"C:\\Users\\ionut\\Desktop\\DC\\MatrixMultiplication\\src\\printA.txt");
+
                 } catch (NumberFormatException ex) {
                     resultLabel.setText("Please enter valid numbers.");
                 }
