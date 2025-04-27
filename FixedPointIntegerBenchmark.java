@@ -6,6 +6,7 @@ class BenchmarkResult {
         this.result = result;
         this.time = time;
     }
+
 }
 
 class FixedPointIntegerBenchmark {

@@ -15,6 +15,8 @@ public class MatrixFileProcessor {
                 matrix[i][j] = scanner.nextDouble();
             }
         }
+
+        scanner.close();
         return matrix;
     }
 
@@ -27,5 +29,7 @@ public class MatrixFileProcessor {
             }
             writer.println();
         }
+
+        writer.close();
     }
 }
