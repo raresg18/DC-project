@@ -12,7 +12,7 @@ public class FixedPointIntegerBenchmark {
             result -= a-b;
             result *= a*b;
 
-            //dividing by 0 case
+            //dividing by zero case
             if(b!=0)result /= b;
             else result /= 1;
 

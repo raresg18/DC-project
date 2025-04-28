@@ -3,7 +3,7 @@ public class BenchmarkResult {
     public double time;
 
     public BenchmarkResult(int result, double time) {
-        this.result = result;
-        this.time = time;
+        this.result=result;
+        this.time=time;
     }
 }
