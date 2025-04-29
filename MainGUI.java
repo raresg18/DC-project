@@ -131,14 +131,6 @@ class FloatingPointBenchmark {
     }
 }
 
-interface MatrixOperations {
-    public double[][] sum(double[][] A, double[][] B);
-    public double[][] subtract(double[][] A, double[][] B);
-    public double[][] multiply(double[][] A, double[][] B);
-    public double[][] transpose(double[][] A);
-
-}
-
 class MatrixFileProcessor {
 
     public double[][] initFromFile(String fileName) throws FileNotFoundException {
@@ -156,22 +148,6 @@ class MatrixFileProcessor {
         return matrix;
     }
 
-    public class MatrixManager {
-        public static void main(String[] args) throws FileNotFoundException {
-            MatrixOperationClass operationTest = new MatrixOperationClass();
-            MatrixFileProcessor reader = new MatrixFileProcessor();
-            double[][] matrixA = reader.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt");
-            double[][] matrixB = reader.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
-
-            long start=System.nanoTime();
-            double[][] matrixC = operationTest.multiply(matrixA, matrixB);
-            reader.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
-            long end=System.nanoTime();
-            System.out.printf("Matrix Multiplication Time: %.2f ms%n", (end - start) / 1e6);
-
-        }
-    }
-
     public void displayMatrix(double[][] matrix, String fileName) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(new File(fileName));
 
@@ -186,68 +162,6 @@ class MatrixFileProcessor {
     }
 }
 
-class MatrixOperationClass implements MatrixOperations {
-    public double[][] A;
-    public double[][] B;
-
-    public double[][] sum (double[][] A, double[][] B) {
-        int rows = A.length;
-        int cols = A[0].length;
-        double[][] result = new double[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                result[i][j] = A[i][j] + B[i][j];
-            }
-        }
-
-        return result;
-    }
-
-
-    public double[][] subtract (double[][] A, double[][] B) {
-        int rows = A.length;
-        int cols = A[0].length;
-        double[][] result = new double[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                result[i][j] = A[i][j] - B[i][j];
-            }
-        }
-        return result;
-    }
-
-    public double[][] multiply (double[][] A, double[][] B) {
-        int rows = A.length;
-        int cols = A[0].length;
-        double[][] result = new double[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                for (int k = 0; k < cols; k++) {
-                    result[i][j] = A[i][k] * B[k][j];
-                }
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public double[][] transpose(double[][] A) {
-        int rows = A.length;
-        int cols = A[0].length;
-        double[][] result = new double[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                result[i][j] = A[j][i];
-            }
-        }
-
-        return result;
-    }
-
-}
 
 class GUI {
 
@@ -426,35 +340,38 @@ class GUI {
             }
         });
 
-        // button3.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         try {
-        //             MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
-        //             MatrixOperationClass matrixOperations = new MatrixOperationClass();
+         button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Stopwatch stopwatch = new Stopwatch();
+                    MatrixOperationClass operationTest = new MatrixOperationClass();
+                    MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
+                    double[][] matrixA = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt");
+                    double[][] matrixB = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
 
-        //             double[][] matrixA = fileProcessor.initFromFile("matrixA.txt");
-        //             double[][] matrixB = fileProcessor.initFromFile("matrixB.txt");
+                    long start=System.nanoTime();
+                    double[][] matrixC = operationTest.multiply(matrixA, matrixB);
+                    fileProcessor.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
+                    long end=System.nanoTime();
+                    System.out.printf("Matrix Multiplication Time: %.2f ms%n", (end - start) / 1e6);
 
-        //             Stopwatch stopwatch = new Stopwatch();
-        //             double[][] resultMatrix = matrixOperations.multiply(matrixA, matrixB);
+                    fileProcessor.displayMatrix(matrixC, "matrixResult.txt");
 
-        //             fileProcessor.displayMatrix(resultMatrix, "matrixResult.txt");
+                    resultLabel.setText("Matrix result written to matrixResult.txt");
 
-        //             resultLabel.setText("Matrix result written to matrixResult.txt");
+                    double elapsedTime = stopwatch.getElapsedTime();
+                    timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
 
-        //             double elapsedTime = stopwatch.getElapsedTime();
-        //             timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
-
-        //         } catch (FileNotFoundException ex) {
-        //             resultLabel.setText("Error reading matrix files.");
-        //             ex.printStackTrace();
-        //         } catch (Exception ex) {
-        //             resultLabel.setText("An error occurred.");
-        //             ex.printStackTrace();
-        //         }
-        //     }
-        // });
+                } catch (FileNotFoundException ex) {
+                    resultLabel.setText("Error reading matrix files.");
+                    ex.printStackTrace();
+                } catch (Exception ex) {
+                    resultLabel.setText("An error occurred.");
+                    ex.printStackTrace();
+                }
+            }
+        });
 
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

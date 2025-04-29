@@ -44,7 +44,7 @@ public class MatrixOperationClass implements MatrixOperations {
         return result;
     }
 
-    @Override
+    /*@Override
     public double[][] transpose(double[][] A) {
         int rows = A.length;
         int cols = A[0].length;
@@ -57,6 +57,6 @@ public class MatrixOperationClass implements MatrixOperations {
         }
 
         return result;
-    }
+    }*/
 
 }
