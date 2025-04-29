@@ -354,7 +354,6 @@ class GUI {
                     double[][] matrixC = operationTest.multiply(matrixA, matrixB);
                     fileProcessor.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
                     long end=System.nanoTime();
-                    System.out.printf("Matrix Multiplication Time: %.2f ms%n", (end - start) / 1e6);
 
                     fileProcessor.displayMatrix(matrixC, "matrixResult.txt");
 
