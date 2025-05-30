@@ -275,7 +275,7 @@ public class MainGUI {
                     double[][] matrixC = new double[500][500];
                     String operation = (String) operationBox.getSelectedItem();
                     int ok=1;
-                    long start=System.nanoTime();
+                    stopwatch.start();
                     switch(operation) {
                         case "Add":
                             matrixC=operationTest.sum(matrixA, matrixB);
@@ -292,7 +292,6 @@ public class MainGUI {
                             break;
                     }
                     fileProcessor.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
-                    long end=System.nanoTime();
 
                     fileProcessor.displayMatrix(matrixC, "matrixResult.txt");
                     if(ok==1)
