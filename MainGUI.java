@@ -9,14 +9,29 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 
-
 public class MainGUI {
+
+    public class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel(String fileName) {
+            backgroundImage = new ImageIcon(fileName).getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Scale the image to fit the entire panel
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 
     public MainGUI() {
         JFrame frame = new JFrame();
+        frame.setContentPane(new BackgroundPanel("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\coolcpu.jpg"));
         frame.setLayout(new BorderLayout());
 
-        frame.setSize(1000, 600);  // Set the size of the window (800x600)
+        frame.setSize(1000, 600);  // Set the size of the window (1000x600)
         frame.setLocationRelativeTo(null);  // Center the window on the screen
 
         String[] operations = {"Add", "Multiply", "Divide", "Sin", "Cos", "Sqrt", "Subtract (for Matrix)"};
@@ -34,7 +49,7 @@ public class MainGUI {
         JButton button3 = new JButton("MATRIX OPERATIONS");
         JButton button4 = new JButton("PI OPERATION");
         JButton button5 = new JButton("SORTING OPERATION");
-        JButton button6 = new JButton("FILE PROCESSING OPERATION.");
+        JButton button6 = new JButton("FILE PROCESSING OPERATION");
         JButton button7 = new JButton("THREADS OPERATION");
 
         // Set button sizes using setPreferredSize
@@ -64,9 +79,10 @@ public class MainGUI {
 
         JPanel gridPanel = new JPanel();
         gridPanel.setLayout(new GridBagLayout());
+        gridPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.insets = new Insets(10, 10, 10, 10); // Add some space around the buttons
+        gbc.insets = new Insets(10, 5, 10, 5); // Add some space around the buttons
 
         // Left Upper Corner
         gbc.gridx = 0;
@@ -103,18 +119,33 @@ public class MainGUI {
         gridPanel.add(button7, gbc);
 
         // Panel for combo boxes (operations and iterations)
+        JLabel label1 = new JLabel("Select Operation:");
+        label1.setForeground(Color.BLACK);
+        label1.setFont(new Font("Verdana", Font.BOLD, 22));
+
+        JLabel label2 = new JLabel("Select Iterations:");
+        label2.setForeground(Color.BLACK);
+        label2.setFont(new Font("Verdana", Font.BOLD, 22));
+
+        JLabel label3 = new JLabel("Select File Capacity:");
+        label3.setForeground(Color.BLACK);
+        label3.setFont(new Font("Verdana", Font.BOLD, 22));
+
         JPanel comboPanel = new JPanel();
-        comboPanel.setLayout(new GridLayout(3, 2, 10, 10)); // Two rows, two columns
-        comboPanel.add(new JLabel("Select Operation:"));
+        comboPanel.setLayout(new GridLayout(3, 2, 10, 10));
+        comboPanel.setOpaque(false);
+
+        comboPanel.add(label1);
         comboPanel.add(operationBox);
-        comboPanel.add(new JLabel("Select Iterations:"));
+        comboPanel.add(label2);
         comboPanel.add(iterationsBox);
-        comboPanel.add(new JLabel("Select File Capacity:"));
+        comboPanel.add(label3);
         comboPanel.add(fileCapacityBox);
 
         // Centering the text fields and labels below the buttons
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(2, 2, 10, 10));
+        bottomPanel.setOpaque(false);
         bottomPanel.add(textField1);
         bottomPanel.add(textField2);
         bottomPanel.add(resultLabel);
@@ -124,6 +155,39 @@ public class MainGUI {
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(comboPanel, BorderLayout.NORTH);  // Place comboBox at the top (North)
         frame.add(bottomPanel, BorderLayout.SOUTH);  // Place text fields and results at the bottom (South)
+
+        // Color all buttons
+        Color buttonColor = new Color(70, 130, 180); // Steel Blue
+        Color textColor = Color.WHITE;
+        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7}) {
+            button.setBackground(buttonColor);
+            button.setForeground(textColor);
+            button.setFocusPainted(false); // remove ugly focus
+            button.setFont(new Font("Arial", Font.BOLD, 16));
+        }
+
+        // ComboBox Font
+        operationBox.setFont(new Font("Verdana", Font.PLAIN, 14));
+        iterationsBox.setFont(new Font("Verdana", Font.PLAIN, 14));
+        fileCapacityBox.setFont(new Font("Verdana", Font.PLAIN, 14));
+
+        //  Label Font
+        resultLabel.setFont(new Font("Verdana", Font.BOLD, 16));
+        resultLabel.setForeground(Color.WHITE);
+        timeLabel.setFont(new Font("Verdana", Font.BOLD, 16));
+        timeLabel.setForeground(Color.WHITE);
+
+        // TextField Padding
+        textField1.setBorder(BorderFactory.createCompoundBorder(
+                textField1.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        textField2.setBorder(BorderFactory.createCompoundBorder(
+                textField2.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+
+        frame.setIconImage(new ImageIcon("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\icon.png").getImage());
 
 
 
@@ -298,13 +362,25 @@ public class MainGUI {
 
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Benchmark");
+        frame.setTitle("Mystery Inc. Benchmark");
         frame.setVisible(true);
     }
 
 
 
     public static void main(String[] args) {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         new MainGUI();
     }
+
 }
