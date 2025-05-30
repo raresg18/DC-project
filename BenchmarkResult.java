@@ -7,4 +7,12 @@ class BenchmarkResult {
         this.time = time;
     }
 
+    public int getResult() {
+        return result;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
 }

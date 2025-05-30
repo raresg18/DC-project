@@ -7,165 +7,11 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-class Stopwatch {
-    private long startTime;
-
-    public Stopwatch() {
-        startTime = System.nanoTime();
-    }
-
-    // Restart the stopwatch
-    public void start() {
-        startTime = System.nanoTime();
-    }
-
-    // Get the elapsed time in seconds
-    public double getElapsedTime() {
-        long endTime = System.nanoTime();
-        return (endTime - startTime) / 1000000000.0;  // nanoseconds to seconds
-    }
-}
-
-class FixedPointIntegerBenchmark {
-
-    public static BenchmarkResult runBenchmark(int a, int b){
-        //measure time
-        Stopwatch stopwatch=new Stopwatch();
-        stopwatch.start();
-
-        int result=0;
-
-        for(int i=0;i<100_000_000;i++){
-            result += a+b;
-            result -= a-b;
-            result *= a*b;
-
-            //dividing by 0 case
-            if(b!=0)result /= b;
-            else result /= 1;
-
-            result &= a;//AND
-            result |= b;//OR
-            result ^= a;//XOR
-            result = ~result;//NOT
-            result <<= 2;//multiply by 4
-            result >>= 1;//divide by two
-            //<=> trying both to test CPU
-        }
-        double time=stopwatch.getElapsedTime();//get the time in ns
-        return new BenchmarkResult(result, time);
-    }
-}
-
-class BenchmarkResult {
-    public int result;
-    public double time;
-
-    public BenchmarkResult(int result, double time) {
-        this.result = result;
-        this.time = time;
-    }
-
-    public int getResult() {
-        return result;
-    }
-
-    public double getTime() {
-        return time;
-    }
-
-}
 
 
-class FloatingPointBenchmark {
+public class MainGUI {
 
-    public static int NUM_ITERATIONS;
-
-    public static double add(double a, double b) {
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += a + b;
-        }
-        return result;
-    }
-
-    public static double multiply(double a, double b) {
-        double result = 1.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result *= a * b;
-            result = Math.IEEEremainder(result, 1e6);
-        }
-        return result;
-    }
-
-    public static double divide(double a, double b) {
-        double result = 1.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result /= a / b;
-        }
-        return result;
-    }
-
-    public static double sin(double a) {
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += Math.sin(a + i * 1e-6);
-        }
-        return result;
-    }
-
-    public static double cos(double a) {
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += Math.cos(a + i * 1e-6);
-        }
-        return result;
-    }
-
-    public static double sqrt() {
-        double result = 0.0;
-        for (int i = 1; i <= NUM_ITERATIONS; i++) {
-            result += Math.sqrt(i);
-        }
-        return result;
-    }
-}
-
-class MatrixFileProcessor {
-
-    public double[][] initFromFile(String fileName) throws FileNotFoundException {
-        File inputFile = new File(fileName);
-        Scanner scanner = new Scanner(inputFile);
-
-        double[][] matrix = new double[500][500];
-        for(int i=0;i<500;i++){
-            for(int j=0;j<500;j++){
-                matrix[i][j] = scanner.nextDouble();
-            }
-        }
-
-        scanner.close();
-        return matrix;
-    }
-
-    public void displayMatrix(double[][] matrix, String fileName) throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(new File(fileName));
-
-        for(int i=0;i<matrix.length;i++){
-            for(int j=0;j<matrix.length;j++){
-                writer.print(matrix[i][j] + " ");
-            }
-            writer.println();
-        }
-
-        writer.close();
-    }
-}
-
-
-class GUI {
-
-    public GUI() {
+    public MainGUI() {
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
@@ -381,6 +227,6 @@ class GUI {
 
 
     public static void main(String[] args) {
-        new GUI();
+        new MainGUI();
     }
 }
