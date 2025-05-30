@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -23,6 +24,9 @@ public class MainGUI {
 
         String[] iterationsOptions = {"1", "100", "5000", "10000000", "50000000", "100000000", "200000000"};
         JComboBox<String> iterationsBox = new JComboBox<>(iterationsOptions);
+
+        String[] fileCapacityOptions = {"512 MB", "1 GB", "2 GB", "3 GB"};
+        JComboBox<String> fileCapacityBox = new JComboBox<>(fileCapacityOptions);
 
         // Create six buttons
         JButton button1 = new JButton("FIXED POINT OPERATIONS");
@@ -100,11 +104,13 @@ public class MainGUI {
 
         // Panel for combo boxes (operations and iterations)
         JPanel comboPanel = new JPanel();
-        comboPanel.setLayout(new GridLayout(2, 2, 10, 10)); // Two rows, two columns
+        comboPanel.setLayout(new GridLayout(3, 2, 10, 10)); // Two rows, two columns
         comboPanel.add(new JLabel("Select Operation:"));
         comboPanel.add(operationBox);
         comboPanel.add(new JLabel("Select Iterations:"));
         comboPanel.add(iterationsBox);
+        comboPanel.add(new JLabel("Select File Capacity:"));
+        comboPanel.add(fileCapacityBox);
 
         // Centering the text fields and labels below the buttons
         JPanel bottomPanel = new JPanel();
@@ -204,25 +210,21 @@ public class MainGUI {
                     double[][] matrixB = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
                     double[][] matrixC = new double[500][500];
                     String operation = (String) operationBox.getSelectedItem();
-
-                    int ok=0;
+                    int ok=1;
                     long start=System.nanoTime();
                     switch(operation) {
                         case "Add":
                             matrixC=operationTest.sum(matrixA, matrixB);
-                            ok=1;
                             break;
                         case "Multiply":
                             matrixC=operationTest.multiply(matrixA, matrixB);
-                            ok=1;
                             break;
                         case "Subtract (for Matrix)":
                             matrixC=operationTest.subtract(matrixA, matrixB);
-                            ok=1;
                             break;
                         default:
                             System.out.println("Invalid operation");
-                            ok=-1;
+                            ok=0;
                             break;
                     }
                     fileProcessor.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
@@ -233,7 +235,7 @@ public class MainGUI {
                     {
                         resultLabel.setText("Matrix result written to matrixResult.txt");
                     }
-                    else if(ok==-1){
+                    else{
                         resultLabel.setText("This operation can't be performed");
                     }
 
@@ -246,6 +248,50 @@ public class MainGUI {
                 } catch (Exception ex) {
                     resultLabel.setText("An error occurred.");
                     ex.printStackTrace();
+                }
+            }
+        });
+
+        button6.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.start();
+                    String fileCapacity = (String) fileCapacityBox.getSelectedItem();
+                    BigFileProcessor bfp = null;
+                    int ok=1;
+                    switch (fileCapacity) {
+                        case "512 MB":
+                            bfp = new BigFileProcessor(512);
+                            break;
+                        case "1 GB":
+                            bfp = new BigFileProcessor(1024);
+                            break;
+                        case "2 GB":
+                            bfp = new BigFileProcessor(2048);
+                            break;
+                        case "3 GB":
+                            bfp = new BigFileProcessor(3072);
+                            break;
+                        default:
+                            System.out.println("Invalid file capacity");
+                            ok=0;
+                            break;
+                    }
+                    if(ok==1){
+                        bfp.readFile();
+                        resultLabel.setText("Result: " + bfp.getTotalBytesRead() + " total read bytes");
+                    }
+                    else{
+                        resultLabel.setText("Invalid file capacity");
+                    }
+                    double elapsedTime = stopwatch.getElapsedTime();
+                    timeLabel.setText("Result: " + String.format("%.3f", elapsedTime) + " seconds");
+                } catch (IOException ex) {
+                    resultLabel.setText("An error reading and processing the file occurred.");
+                    throw new RuntimeException(ex);
                 }
             }
         });
