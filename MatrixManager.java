@@ -10,7 +10,7 @@ public class MatrixManager {
         double[][] matrixB = reader.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
         
         long start=System.nanoTime();
-        double[][] matrixC = operationTest.multiply(matrixA, matrixB);
+        double[][] matrixC = operationTest.subtract(matrixA, matrixB);
         reader.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
         long end=System.nanoTime();
         System.out.printf("Matrix Multiplication Time: %.2f ms%n", (end - start) / 1e6);

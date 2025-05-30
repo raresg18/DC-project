@@ -15,31 +15,33 @@ public class MainGUI {
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
-        frame.setSize(500, 400);  // Set the size of the window (800x600)
+        frame.setSize(1000, 600);  // Set the size of the window (800x600)
         frame.setLocationRelativeTo(null);  // Center the window on the screen
 
-        String[] operations = {"Add", "Multiply", "Divide", "Sin", "Cos", "Sqrt"};
+        String[] operations = {"Add", "Multiply", "Divide", "Sin", "Cos", "Sqrt", "Subtract (for Matrix)"};
         JComboBox<String> operationBox = new JComboBox<>(operations);
 
         String[] iterationsOptions = {"1", "100", "5000", "10000000", "50000000", "100000000", "200000000"};
         JComboBox<String> iterationsBox = new JComboBox<>(iterationsOptions);
 
         // Create six buttons
-        JButton button1 = new JButton("FIXED POINT");
-        JButton button2 = new JButton("FLOATING POINT");
-        JButton button3 = new JButton("MATRIX OPERATION");
-        JButton button4 = new JButton("Button 4");
-        JButton button5 = new JButton("Button 5");
-        JButton button6 = new JButton("Button 6");
+        JButton button1 = new JButton("FIXED POINT OPERATIONS");
+        JButton button2 = new JButton("FLOATING POINT OPERATIONS");
+        JButton button3 = new JButton("MATRIX OPERATIONS");
+        JButton button4 = new JButton("PI OPERATION");
+        JButton button5 = new JButton("SORTING OPERATION");
+        JButton button6 = new JButton("FILE PROCESSING OPERATION.");
+        JButton button7 = new JButton("THREADS OPERATION");
 
         // Set button sizes using setPreferredSize
-        Dimension buttonSize = new Dimension(200, 30); // 80px wide and 30px tall
+        Dimension buttonSize = new Dimension(360, 40); // 80px wide and 30px tall
         button1.setPreferredSize(buttonSize);
         button2.setPreferredSize(buttonSize);
         button3.setPreferredSize(buttonSize);
         button4.setPreferredSize(buttonSize);
         button5.setPreferredSize(buttonSize);
         button6.setPreferredSize(buttonSize);
+        button7.setPreferredSize(buttonSize);
 
         // Set the minimum size for consistency
         button1.setMinimumSize(buttonSize);
@@ -48,9 +50,10 @@ public class MainGUI {
         button4.setMinimumSize(buttonSize);
         button5.setMinimumSize(buttonSize);
         button6.setMinimumSize(buttonSize);
+        button7.setMinimumSize(buttonSize);
 
-        JTextField textField1 = new JTextField(10);
-        JTextField textField2 = new JTextField(10);
+        JTextField textField1 = new JTextField(20);
+        JTextField textField2 = new JTextField(20);
 
         JLabel resultLabel = new JLabel("Result: ");
         JLabel timeLabel = new JLabel("Time: ");
@@ -90,6 +93,10 @@ public class MainGUI {
         gbc.gridx = 2;
         gbc.gridy = 2;
         gridPanel.add(button6, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gridPanel.add(button7, gbc);
 
         // Panel for combo boxes (operations and iterations)
         JPanel comboPanel = new JPanel();
@@ -195,15 +202,40 @@ public class MainGUI {
                     MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
                     double[][] matrixA = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt");
                     double[][] matrixB = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
+                    double[][] matrixC = new double[500][500];
+                    String operation = (String) operationBox.getSelectedItem();
 
+                    int ok=0;
                     long start=System.nanoTime();
-                    double[][] matrixC = operationTest.multiply(matrixA, matrixB);
+                    switch(operation) {
+                        case "Add":
+                            matrixC=operationTest.sum(matrixA, matrixB);
+                            ok=1;
+                            break;
+                        case "Multiply":
+                            matrixC=operationTest.multiply(matrixA, matrixB);
+                            ok=1;
+                            break;
+                        case "Subtract (for Matrix)":
+                            matrixC=operationTest.subtract(matrixA, matrixB);
+                            ok=1;
+                            break;
+                        default:
+                            System.out.println("Invalid operation");
+                            ok=-1;
+                            break;
+                    }
                     fileProcessor.displayMatrix(matrixC, "C:\\Users\\ionut\\Desktop\\DC\\DC-project\\printA.txt");
                     long end=System.nanoTime();
 
                     fileProcessor.displayMatrix(matrixC, "matrixResult.txt");
-
-                    resultLabel.setText("Matrix result written to matrixResult.txt");
+                    if(ok==1)
+                    {
+                        resultLabel.setText("Matrix result written to matrixResult.txt");
+                    }
+                    else if(ok==-1){
+                        resultLabel.setText("This operation can't be performed");
+                    }
 
                     double elapsedTime = stopwatch.getElapsedTime();
                     timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");

@@ -22,7 +22,12 @@ class FloatingPointBenchmark {
     public static double divide(double a, double b) {
         double result = 1.0;
         for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result /= a / b;
+            if(i==0){
+                result = a / b;
+            }
+            else {
+                result /= a / b;
+            }
         }
         return result;
     }
