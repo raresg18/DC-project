@@ -52,6 +52,7 @@ public class MainGUI {
         JButton button5 = new JButton("SORTING OPERATION");
         JButton button6 = new JButton("FILE PROCESSING OPERATION");
         JButton button7 = new JButton("THREADS OPERATION");
+        JButton button8 = new JButton("RANDOM MATRIX OPERATION");
 
         // Set button sizes using setPreferredSize
         Dimension buttonSize = new Dimension(360, 40); // 80px wide and 30px tall
@@ -62,6 +63,7 @@ public class MainGUI {
         button5.setPreferredSize(buttonSize);
         button6.setPreferredSize(buttonSize);
         button7.setPreferredSize(buttonSize);
+        button8.setPreferredSize(buttonSize);
 
         // Set the minimum size for consistency
         button1.setMinimumSize(buttonSize);
@@ -71,6 +73,7 @@ public class MainGUI {
         button5.setMinimumSize(buttonSize);
         button6.setMinimumSize(buttonSize);
         button7.setMinimumSize(buttonSize);
+        button8.setMinimumSize(buttonSize);
 
         JTextField textField1 = new JTextField(20);
         JTextField textField2 = new JTextField(20);
@@ -119,6 +122,10 @@ public class MainGUI {
         gbc.gridy = 3;
         gridPanel.add(button7, gbc);
 
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gridPanel.add(button8, gbc);
+
         // Panel for combo boxes (operations and iterations)
         JLabel label1 = new JLabel("Select Operation:");
         label1.setForeground(Color.BLACK);
@@ -160,7 +167,7 @@ public class MainGUI {
         // Color all buttons
         Color buttonColor = new Color(70, 130, 180); // Steel Blue
         Color textColor = Color.WHITE;
-        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7}) {
+        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7, button8}) {
             button.setBackground(buttonColor);
             button.setForeground(textColor);
             button.setFocusPainted(false); // remove ugly focus
@@ -273,8 +280,8 @@ public class MainGUI {
                     Stopwatch stopwatch = new Stopwatch();
                     MatrixOperationClass operationTest = new MatrixOperationClass();
                     MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
-                    double[][] matrixA = fileProcessor.generateRandomMatrix("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt",500,500);
-                    double[][] matrixB = fileProcessor.generateRandomMatrix("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt",500,500);
+                    double[][] matrixA = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt");
+                    double[][] matrixB = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
                     double[][] matrixC = new double[500][500];
                     String operation = (String) operationBox.getSelectedItem();
                     int ok=1;
@@ -388,6 +395,36 @@ public class MainGUI {
                     timeLabel.setText("Result: " + String.format("%.3f", elapsedTime) + " seconds");
                 } catch (IOException ex) {
                     resultLabel.setText("An error reading and processing the file occurred.");
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        button8.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    int rows = Integer.parseInt(textField1.getText());
+                    int cols = Integer.parseInt(textField2.getText());
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.start();
+                    MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
+                    File resultFile = new File("RandomMatrix.txt");
+                    double[][] matrix = fileProcessor.generateRandomMatrix("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\RandomMatrix.txt",rows,cols);
+                    double elapsedTime = stopwatch.getElapsedTime();
+                    resultLabel.setText("Matrix written to RandomMatrix.txt");
+                    timeLabel.setText("Time: "+elapsedTime+" seconds");
+                    if(resultFile.exists()){
+                        Desktop.getDesktop().open(resultFile);
+                    }
+                    else{
+                        resultLabel.setText("Result file not found!");
+                    }
+
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
