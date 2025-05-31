@@ -4,26 +4,12 @@ import java.io.PrintWriter;
 
 public class PiSpigotBenchmarkOneThread {
     // default number of fractional digits to compute
-    private static final int DEFAULT_DIGITS = 10_000;
 
-    public static void main(String[] args) {
-        int digits = DEFAULT_DIGITS;
-        if (args.length > 0) {
-            try {
-                digits = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.err.println("Usage: java PiSpigotBenchmarkOneThread [digits]");
-                return;
-            }
-        }
 
-        PiSpigotBenchmarkOneThread bench = new PiSpigotBenchmarkOneThread();
-        long timeMs = bench.benchmarkComputation(digits);
-        System.out.println("Time taken: " + timeMs + " ms");
-    }
+
 
     /**
-     * Runs pi computation and writesto file.
+     * Runs pi computation and writes to file.
      * @param digits number of fractional digits to compute
      * @return elapsed time in milliseconds
      */
@@ -39,7 +25,7 @@ public class PiSpigotBenchmarkOneThread {
 
     private String computePiDigits(int digits) {
         // we need one extra iteration to get the integer “3”
-        System.out.println("Computing " + DEFAULT_DIGITS + " of pi...");
+        System.out.println("Computing " + digits + " of pi...");
         int totalDigits = digits + 1;
         // array length ≃ 10*totalDigits/3 + 1
         int arrayLength = totalDigits * 10 / 3 + 1;
@@ -50,8 +36,11 @@ public class PiSpigotBenchmarkOneThread {
 
         StringBuilder sb = new StringBuilder(totalDigits + 1);
         StringBuilder predigits = new StringBuilder();
+        int newline_buffer = 0;
 
         for (int iter = 0; iter < totalDigits; iter++) {
+
+            newline_buffer += 1;
             int carry = 0;
             // inner “spigot” loop, backwards through the array
             for (int i = arrayLength - 1; i > 0; i--) {
@@ -85,6 +74,11 @@ public class PiSpigotBenchmarkOneThread {
                 sb.append(predigits);
                 predigits.setLength(0);
             }
+            if(newline_buffer >=100) {
+                sb.append('\n');
+                newline_buffer = 0;
+            }
+
         }
 
         // any trailing buffered nines
