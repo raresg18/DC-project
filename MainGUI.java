@@ -338,6 +338,11 @@ public class MainGUI {
 
                     timeLabel.setText(piComputer.benchmarkComputation(no_digits)/1000.0 + "seconds");
                     resultLabel.setText("Computed "+no_digits+" digits of pi into computed_pi.txt.");
+                    try {
+                        Process proc = Runtime.getRuntime().exec("notepad.exe computed_pi.txt");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
 
 
 

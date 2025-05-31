@@ -36,8 +36,11 @@ public class PiSpigotBenchmarkOneThread {
 
         StringBuilder sb = new StringBuilder(totalDigits + 1);
         StringBuilder predigits = new StringBuilder();
+        int newline_buffer = 0;
 
         for (int iter = 0; iter < totalDigits; iter++) {
+
+            newline_buffer += 1;
             int carry = 0;
             // inner “spigot” loop, backwards through the array
             for (int i = arrayLength - 1; i > 0; i--) {
@@ -71,6 +74,11 @@ public class PiSpigotBenchmarkOneThread {
                 sb.append(predigits);
                 predigits.setLength(0);
             }
+            if(newline_buffer >=100) {
+                sb.append('\n');
+                newline_buffer = 0;
+            }
+
         }
 
         // any trailing buffered nines
