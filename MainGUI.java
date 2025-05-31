@@ -270,8 +270,8 @@ public class MainGUI {
                     Stopwatch stopwatch = new Stopwatch();
                     MatrixOperationClass operationTest = new MatrixOperationClass();
                     MatrixFileProcessor fileProcessor = new MatrixFileProcessor();
-                    double[][] matrixA = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt");
-                    double[][] matrixB = fileProcessor.initFromFile("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt");
+                    double[][] matrixA = fileProcessor.generateRandomMatrix("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixA.txt",500,500);
+                    double[][] matrixB = fileProcessor.generateRandomMatrix("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\matrixB.txt",500,500);
                     double[][] matrixC = new double[500][500];
                     String operation = (String) operationBox.getSelectedItem();
                     int ok=1;

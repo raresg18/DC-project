@@ -21,7 +21,7 @@ class MatrixFileProcessor {
         return matrix;
     }
 
-    public double[][] generateRandomMatrix(int rows, int cols) {
+    public double[][] generateRandomMatrix(String fileName,int rows, int cols) throws FileNotFoundException {
         Random rand = new Random();
         double[][] matrix = new double[rows][cols];
 
@@ -30,6 +30,7 @@ class MatrixFileProcessor {
                 matrix[i][j] = 100+rand.nextDouble()*900;
             }
         }
+        displayMatrix(matrix,fileName);
         return matrix;
     }
 
