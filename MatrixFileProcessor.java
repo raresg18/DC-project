@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.Scanner;
 
 class MatrixFileProcessor {
@@ -17,6 +18,18 @@ class MatrixFileProcessor {
         }
 
         scanner.close();
+        return matrix;
+    }
+
+    public double[][] generateRandomMatrix(int rows, int cols) {
+        Random rand = new Random();
+        double[][] matrix = new double[rows][cols];
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                matrix[i][j] = 100+rand.nextDouble()*900;
+            }
+        }
         return matrix;
     }
 

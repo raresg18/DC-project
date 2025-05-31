@@ -297,6 +297,17 @@ public class MainGUI {
                     if(ok==1)
                     {
                         resultLabel.setText("Matrix result written to matrixResult.txt");
+                        try {
+                            File resultFile = new File("matrixResult.txt");
+                            if (resultFile.exists()) {
+                                Desktop.getDesktop().open(resultFile);
+                            } else {
+                                resultLabel.setText("Result file not found!");
+                            }
+                        } catch (IOException ex) {
+                            resultLabel.setText("Failed to open result file.");
+                            ex.printStackTrace();
+                        }
                     }
                     else{
                         resultLabel.setText("This operation can't be performed");
