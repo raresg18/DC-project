@@ -336,7 +336,7 @@ public class MainGUI {
                     int no_digits = Integer.parseInt(textField1.getText());
                     PiSpigotBenchmarkOneThread piComputer = new PiSpigotBenchmarkOneThread();
 
-                    timeLabel.setText(piComputer.benchmarkComputation(no_digits)/1000.0 + "seconds");
+                    timeLabel.setText("Time: "+piComputer.benchmarkComputation(no_digits)/1000.0 + "seconds");
                     resultLabel.setText("Computed "+no_digits+" digits of pi into computed_pi.txt.");
                     try {
                         Process proc = Runtime.getRuntime().exec("notepad.exe computed_pi.txt");
