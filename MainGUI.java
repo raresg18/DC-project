@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+//import BenchmarkResult;
 
 
 public class MainGUI {
@@ -200,10 +201,12 @@ public class MainGUI {
                     int num2 = Integer.parseInt(textField2.getText());
 
                     Stopwatch stopwatch = new Stopwatch();
-                    BenchmarkResult benchmarkResult = FixedPointIntegerBenchmark.runBenchmark(num1, num2);
+//                    BenchmarkResult benchmarkResult = FixedPointIntegerBenchmark.runBenchmark(num1, num2);
 
-                    int result = benchmarkResult.getResult();
-                    double elapsedTime = benchmarkResult.getTime();
+//                    int result = benchmarkResult.getResult();
+//                    double elapsedTime = benchmarkResult.getTime();
+                    int result = 1;
+                    double elapsedTime = 5;
 
                     resultLabel.setText("Result: " + result);
                     timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
@@ -323,6 +326,21 @@ public class MainGUI {
                     resultLabel.setText("An error occurred.");
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    int no_digits = Integer.parseInt(textField1.getText());
+                    PiSpigotBenchmarkOneThread piComputer = new PiSpigotBenchmarkOneThread();
+
+                    timeLabel.setText(piComputer.benchmarkComputation(no_digits)/1000.0 + "seconds");
+                    resultLabel.setText("Computed "+no_digits+" digits of pi into computed_pi.txt.");
+
+
+
             }
         });
 

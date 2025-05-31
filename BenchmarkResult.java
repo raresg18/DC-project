@@ -1,4 +1,4 @@
-class BenchmarkResult {
+public class BenchmarkResult {
     public int result;
     public double time;
 
