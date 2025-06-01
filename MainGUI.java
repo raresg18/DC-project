@@ -35,7 +35,12 @@ public class MainGUI {
         frame.setSize(1000, 600);  // Set the size of the window (1000x600)
         frame.setLocationRelativeTo(null);  // Center the window on the screen
 
-        String[] operations = {"Add", "Multiply", "Divide", "Sin", "Cos", "Sqrt", "Subtract (for Matrix)"};
+        String[] operations = {"Add", "Multiply", "Divide", "Sin", "Cos", "Sqrt", "Subtract (for Matrix)",
+                "Subtract (Fixed Point)",
+                "AND (Fixed Point)",
+                "OR (Fixed Point)",
+                "XOR (Fixed Point)",
+               };
         JComboBox<String> operationBox = new JComboBox<>(operations);
 
         String[] iterationsOptions = {"1", "100", "5000", "10000000", "50000000", "100000000", "200000000"};
@@ -199,21 +204,47 @@ public class MainGUI {
 
 
 
-        // Action listener for the button click to perform addition
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int num1 = Integer.parseInt(textField1.getText());
-                    int num2 = Integer.parseInt(textField2.getText());
+                    String selectedIterations = (String) iterationsBox.getSelectedItem();
+                    int numIterations = Integer.parseInt(selectedIterations.replace(",", "").trim());
 
                     Stopwatch stopwatch = new Stopwatch();
-//                    BenchmarkResult benchmarkResult = FixedPointIntegerBenchmark.runBenchmark(num1, num2);
+                    int num1 = Integer.parseInt(textField1.getText());
+                    int num2 = Integer.parseInt(textField2.getText());
+                    String operation = ((String) operationBox.getSelectedItem()).replace(" (Fixed Point)", "");
 
-//                    int result = benchmarkResult.getResult();
-//                    double elapsedTime = benchmarkResult.getTime();
-                    int result = 1;
-                    double elapsedTime = 5;
+
+                    stopwatch.start();
+
+                    int result = 0;
+                    switch (operation) {
+                        case "Add":
+                            result = FixedPointIntegerBenchmark.add(num1, num2);
+                            break;
+                        case "Subtract":
+                            result = FixedPointIntegerBenchmark.subtract(num1, num2);
+                            break;
+                        case "Multiply":
+                            result = FixedPointIntegerBenchmark.multiply(num1, num2);
+                            break;
+                        case "Divide":
+                            result = FixedPointIntegerBenchmark.divide(num1, num2);
+                            break;
+                        case "AND":
+                            result = FixedPointIntegerBenchmark.andOperation(num1, num2);
+                            break;
+                        case "OR":
+                            result = FixedPointIntegerBenchmark.orOperation(num1, num2);
+                            break;
+                        case "XOR":
+                            result = FixedPointIntegerBenchmark.xorOperation(num1, num2);
+                            break;
+                    }
+
+                    double elapsedTime = stopwatch.getElapsedTime();
 
                     resultLabel.setText("Result: " + result);
                     timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
@@ -223,6 +254,7 @@ public class MainGUI {
                 }
             }
         });
+
 
         button2.addActionListener(new ActionListener() {
             @Override
