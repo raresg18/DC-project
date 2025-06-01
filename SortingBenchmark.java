@@ -8,20 +8,22 @@ public class SortingBenchmark {
     }
 }
 
+
 class Sort {
 
     private static final int SIZE = 1_000_000;
     private final int[] originalArray = new int[SIZE];
-    private final StringBuilder resultBuilder = new StringBuilder();
+    private final StringBuilder results = new StringBuilder();
 
     public String run() {
         generateRandomArray();
 
-        benchmark("Java Arrays.sort", SortingAlgorithms::javaSort);
-        benchmark("Custom QuickSort", SortingAlgorithms::quickSort);
-        benchmark("Custom MergeSort", SortingAlgorithms::mergeSort);
+        results.setLength(0); 
+        results.append(benchmark("Java Arrays.sort", SortingAlgorithms::javaSort));
+        results.append(benchmark("Custom QuickSort", SortingAlgorithms::quickSort));
+        results.append(benchmark("Custom MergeSort", SortingAlgorithms::mergeSort));
 
-        return resultBuilder.toString();
+        return results.toString();
     }
 
     private void generateRandomArray() {
@@ -31,19 +33,22 @@ class Sort {
         }
     }
 
-    private void benchmark(String name, Consumer<int[]> sortMethod) {
+    private String benchmark(String name, Consumer<int[]> sortMethod) {
         int[] copy = Arrays.copyOf(originalArray, SIZE);
         long start = System.nanoTime();
         sortMethod.accept(copy);
         long end = System.nanoTime();
-        double timeMs = (end - start) / 1e6;
-        resultBuilder.append(String.format("%s: %.2f ms%n", name, timeMs));
+        double ms = (end - start) / 1e6;
+        String result = String.format("%s: %.2f ms%n", name, ms);
+        results.append(result);
+        return result;
     }
 
     interface Consumer<T> {
         void accept(T t);
     }
 }
+
 
 
 class SortingAlgorithms {
