@@ -12,13 +12,16 @@ class Sort {
 
     private static final int SIZE = 1_000_000;
     private final int[] originalArray = new int[SIZE];
+    private final StringBuilder resultBuilder = new StringBuilder();
 
-    public void run() {
+    public String run() {
         generateRandomArray();
 
         benchmark("Java Arrays.sort", SortingAlgorithms::javaSort);
         benchmark("Custom QuickSort", SortingAlgorithms::quickSort);
         benchmark("Custom MergeSort", SortingAlgorithms::mergeSort);
+
+        return resultBuilder.toString();
     }
 
     private void generateRandomArray() {
@@ -33,13 +36,15 @@ class Sort {
         long start = System.nanoTime();
         sortMethod.accept(copy);
         long end = System.nanoTime();
-        System.out.printf("%s: %.2f ms%n", name, (end - start) / 1e6);
+        double timeMs = (end - start) / 1e6;
+        resultBuilder.append(String.format("%s: %.2f ms%n", name, timeMs));
     }
 
     interface Consumer<T> {
         void accept(T t);
     }
 }
+
 
 class SortingAlgorithms {
 
