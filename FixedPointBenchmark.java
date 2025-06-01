@@ -1,15 +1,15 @@
 class FixedPointIntegerBenchmark {
 
     public static int add(int a, int b) {
-        return a+b;
+        return a + b;
     }
 
     public static int subtract(int a, int b) {
-        return a-b;
+        return a - b;
     }
 
     public static int multiply(int a, int b) {
-        return a*b;
+        return a * b;
     }
 
     public static int divide(int a, int b) {
@@ -21,7 +21,7 @@ class FixedPointIntegerBenchmark {
     }
 
     public static int andOperation(int a, int b) {
-        return a & b;
+        return  a & b;
     }
 
     public static int orOperation(int a, int b) {
@@ -31,6 +31,5 @@ class FixedPointIntegerBenchmark {
     public static int xorOperation(int a, int b) {
         return a ^ b;
     }
-
 
 }
