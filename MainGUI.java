@@ -56,7 +56,7 @@ public class MainGUI {
         JButton button4 = new JButton("PI OPERATION");
         JButton button5 = new JButton("SORTING OPERATION");
         JButton button6 = new JButton("FILE PROCESSING OPERATION");
-        JButton button7 = new JButton("THREADS OPERATION");
+        JButton button7 = new JButton("PRIME NUMBERS");
         JButton button8 = new JButton("RANDOM MATRIX OPERATION");
 
         // Set button sizes using setPreferredSize
@@ -479,6 +479,29 @@ button5.addActionListener(new ActionListener() {
                     resultLabel.setText("An error reading and processing the file occurred.");
                     throw new RuntimeException(ex);
                 }
+            }
+        });
+
+        button7.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    long start = Integer.parseInt(textField1.getText());
+                    long end = Integer.parseInt(textField2.getText());
+                    int[] callCount = new int[1];
+                    long[] lastPrime = new long[1];
+                    long startTime = System.nanoTime();
+                    PrimeCrashTest.findPrimeRecursive(start,end,callCount,lastPrime);
+                    long endTime = System.nanoTime();
+                    long durationNano = endTime - startTime;
+                    long durationMicro = durationNano / 1_000;
+                    long durationMilli = durationNano / 1_000_000;
+                    resultLabel.setText("Total recursive calls: " + callCount[0]+ "   Last Prime: "+lastPrime[0]);
+                    timeLabel.setText("Runtime: " + durationMicro + " µs (" + durationMilli + " ms)");
+                }
+                catch(NumberFormatException ex){
+                    resultLabel.setText("Invalid number.");}
             }
         });
 
