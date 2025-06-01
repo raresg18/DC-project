@@ -388,6 +388,31 @@ public class MainGUI {
             }
         });
 
+
+        button5.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.start();
+
+          
+            Sort sorter = new Sort();
+            String result = sorter.run();
+
+            double elapsedTime = stopwatch.getElapsedTime();
+
+            resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
+            timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
+
+        } catch (Exception ex) {
+            resultLabel.setText("An error occurred during sorting.");
+            ex.printStackTrace();
+        }
+    }
+});
+
+
         button6.addActionListener(new ActionListener() {
 
             @Override
