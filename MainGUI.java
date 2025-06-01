@@ -413,28 +413,29 @@ public class MainGUI {
         });
 
 
-        button5.addActionListener(new ActionListener() {
+button5.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         try {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.start();
 
-          
-            Sort sorter = new Sort();
-            String result = sorter.run();
+            Sort sort = new Sort();
+            String results = sort.run();
 
             double elapsedTime = stopwatch.getElapsedTime();
 
-           resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
-            timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
-
+            resultLabel.setText("<html>" + results.replaceAll("\n", "<br>") + "</html>"); 
+            timeLabel.setText("Total Time: " + String.format("%.3f", elapsedTime) + " seconds");
         } catch (Exception ex) {
-            resultLabel.setText("An error occurred during sorting.");
+            resultLabel.setText("Error running sorting benchmark.");
+            timeLabel.setText("");
             ex.printStackTrace();
         }
     }
 });
+
 
 
         button6.addActionListener(new ActionListener() {
