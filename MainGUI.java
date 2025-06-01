@@ -204,7 +204,7 @@ public class MainGUI {
 
 
 
-        button1.addActionListener(new ActionListener() {
+      button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -216,10 +216,15 @@ public class MainGUI {
                     int num2 = Integer.parseInt(textField2.getText());
                     String operation = ((String) operationBox.getSelectedItem()).replace(" (Fixed Point)", "");
 
+                    FixedPointIntegerBenchmark.NUM_ITERATIONS = numIterations;
 
                     stopwatch.start();
 
                     int result = 0;
+                    int change = 0;
+                    boolean validOperation = true;
+                    String resultMessage = "";
+
                     switch (operation) {
                         case "Add":
                             result = FixedPointIntegerBenchmark.add(num1, num2);
@@ -231,7 +236,9 @@ public class MainGUI {
                             result = FixedPointIntegerBenchmark.multiply(num1, num2);
                             break;
                         case "Divide":
-                            result = FixedPointIntegerBenchmark.divide(num1, num2);
+                            int[] divisionResults = FixedPointIntegerBenchmark.divide(num1, num2);
+                            result = divisionResults[0]; // Final result
+                            change = divisionResults[1]; // Corrected integer change
                             break;
                         case "AND":
                             result = FixedPointIntegerBenchmark.andOperation(num1, num2);
@@ -242,18 +249,35 @@ public class MainGUI {
                         case "XOR":
                             result = FixedPointIntegerBenchmark.xorOperation(num1, num2);
                             break;
+                        case "Sin":
+                            resultMessage = "This is sin for " + num1;
+                            break;
+                        case "Cos":
+                            resultMessage = "This is cos for " + num1;
+                            break;
+                        case "Sqrt":
+                            resultMessage = "This is sqrt for " + num1;
+                            break;
+                        default:
+                            validOperation = false;
+                            resultLabel.setText("Selected operation is not supported for Fixed Point.");
+                            break;
                     }
 
                     double elapsedTime = stopwatch.getElapsedTime();
 
-                    resultLabel.setText("Result: " + result);
-                    timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
+                    if (validOperation) {
+                        resultLabel.setText(resultMessage + " | Final Result: " + result +
+                                " | Change: " + change);
+                        timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
+                    }
 
                 } catch (NumberFormatException ex) {
                     resultLabel.setText("Please enter valid numbers.");
                 }
             }
         });
+
 
 
         button2.addActionListener(new ActionListener() {
@@ -398,11 +422,11 @@ public class MainGUI {
 
           
             Sort sorter = new Sort();
-            String result = sorter.run();
+            //String result = sorter.run();
 
             double elapsedTime = stopwatch.getElapsedTime();
 
-            resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
+           // resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
             timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
 
         } catch (Exception ex) {
