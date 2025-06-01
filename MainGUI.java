@@ -422,11 +422,11 @@ public class MainGUI {
 
           
             Sort sorter = new Sort();
-            //String result = sorter.run();
+            String result = sorter.run();
 
             double elapsedTime = stopwatch.getElapsedTime();
 
-           // resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
+           resultLabel.setText("<html>" + result.replaceAll("\n", "<br>") + "</html>");
             timeLabel.setText("Time: " + String.format("%.9f", elapsedTime) + " seconds");
 
         } catch (Exception ex) {
