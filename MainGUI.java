@@ -413,28 +413,42 @@ public class MainGUI {
         });
 
 
-button5.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
-        try {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.start();
+ button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.start();
 
-            Sort sort = new Sort();
-            String results = sort.run();
+                   
+                    Sort sortBenchmark = new Sort();
+                    String resultText = sortBenchmark.run();
 
-            double elapsedTime = stopwatch.getElapsedTime();
+                   
+                    String outputFile = "sorting_result.txt";
+                    try (PrintWriter writer = new PrintWriter(outputFile)) {
+                        writer.write(resultText);
+                    }
 
-            resultLabel.setText("<html>" + results.replaceAll("\n", "<br>") + "</html>"); 
-            timeLabel.setText("Total Time: " + String.format("%.3f", elapsedTime) + " seconds");
-        } catch (Exception ex) {
-            resultLabel.setText("Error running sorting benchmark.");
-            timeLabel.setText("");
-            ex.printStackTrace();
-        }
-    }
-});
+                    double elapsedTime = stopwatch.getElapsedTime();
+                    resultLabel.setText("Results written to sorting_result.txt");
+                    timeLabel.setText("Time: " + String.format("%.3f", elapsedTime) + " seconds");
+
+                    
+                    File file = new File(outputFile);
+                    if (file.exists()) {
+                        Desktop.getDesktop().open(file);
+                    } else {
+                        resultLabel.setText("Result file not found!");
+                    }
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    resultLabel.setText("Failed to write or open result file.");
+                }
+            }
+        });
+
 
 
 
