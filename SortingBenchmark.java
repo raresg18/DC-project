@@ -4,7 +4,7 @@ public class SortingBenchmark {
 
     public static void main(String[] args) {
         Sort s = new Sort();
-        s.run();
+        System.out.println(s.run());
     }
 }
 
@@ -18,7 +18,7 @@ class Sort {
     public String run() {
         generateRandomArray();
 
-        results.setLength(0); 
+        results.setLength(0);
         results.append(benchmark("Java Arrays.sort", SortingAlgorithms::javaSort));
         results.append(benchmark("Custom QuickSort", SortingAlgorithms::quickSort));
         results.append(benchmark("Custom MergeSort", SortingAlgorithms::mergeSort));
@@ -39,16 +39,13 @@ class Sort {
         sortMethod.accept(copy);
         long end = System.nanoTime();
         double ms = (end - start) / 1e6;
-        String result = String.format("%s: %.2f ms%n", name, ms);
-        results.append(result);
-        return result;
+        return String.format("%s: %.2f ms%n", name, ms);
     }
 
     interface Consumer<T> {
         void accept(T t);
     }
 }
-
 
 
 class SortingAlgorithms {
