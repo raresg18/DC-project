@@ -75,29 +75,27 @@ public class FixedPointIntegerBenchmark {
         return result;
     }
 
-    public static double sin(int a) {
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += Math.sin(Math.toRadians(a + (i * 1e-6)));
-        }
-        return result;
+    public static int sin(int a) {
+    double result = 0.0;
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+        result += Math.sin(Math.toRadians(a + (i * 1e-6)));
     }
-
-    public static double cos(int a) {
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += Math.cos(Math.toRadians(a + (i * 1e-6)));
-        }
-        return result;
-    }
-
-    public static double sqrt(int a) {
-        if (a < 0) return Double.NaN; // Prevent square root of negative numbers
-        double result = 0.0;
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
-            result += Math.sqrt(a + (i * 1e-6));
-        }
-        return result;
-    }
+    return (int) Math.round(result); // Convert to nearest integer
 }
 
+public static int cos(int a) {
+    double result = 0.0;
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+        result += Math.cos(Math.toRadians(a + (i * 1e-6)));
+    }
+    return (int) Math.round(result); // Convert to nearest integer
+}
+
+public static int sqrt(int a) {
+    if (a < 0) return -1; // Return -1 instead of NaN to indicate invalid input
+    double result = 0.0;
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+        result += Math.sqrt(a + (i * 1e-6));
+    }
+    return (int) Math.round(result); // Convert to nearest integer
+}}
