@@ -60,7 +60,7 @@ public class MainGUI {
         JButton button7 = new JButton("PRIME NUMBERS");
         JButton button8 = new JButton("RANDOM MATRIX OPERATION");
         JButton button9 = new JButton("PRIME NUM - THREADS");
-
+        JButton button10 = new JButton("ENCRYPTION PERFORMANCE");
 
         // Set button sizes using setPreferredSize
         Dimension buttonSize = new Dimension(360, 40); // 80px wide and 30px tall
@@ -73,6 +73,7 @@ public class MainGUI {
         button7.setPreferredSize(buttonSize);
         button8.setPreferredSize(buttonSize);
         button9.setPreferredSize(buttonSize);
+        button10.setPreferredSize(buttonSize);
 
         // Set the minimum size for consistency
         button1.setMinimumSize(buttonSize);
@@ -84,7 +85,7 @@ public class MainGUI {
         button7.setMinimumSize(buttonSize);
         button8.setMinimumSize(buttonSize);
         button9.setMinimumSize(buttonSize);
-
+        button10.setMinimumSize(buttonSize);
 
         JTextField textField1 = new JTextField(20);
         JTextField textField2 = new JTextField(20);
@@ -139,10 +140,13 @@ public class MainGUI {
         gbc.gridy = 3;
         gridPanel.add(button8, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 4;
         gridPanel.add(button9, gbc);
 
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gridPanel.add(button10, gbc);
 
         // Panel for combo boxes (operations and iterations)
         JLabel label1 = new JLabel("Select Operation:");
@@ -186,7 +190,7 @@ public class MainGUI {
         // Color all buttons
         Color buttonColor = new Color(70, 130, 180); // Steel Blue
         Color textColor = Color.WHITE;
-        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7, button8,button9}) {
+        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7, button8,button9, button10}) {
             button.setBackground(buttonColor);
             button.setForeground(textColor);
             button.setFocusPainted(false); // remove ugly focus
@@ -611,6 +615,36 @@ public class MainGUI {
                     resultLabel.setText("Invalid number.");
                 } catch (InterruptedException ex) {
                     resultLabel.setText("Thread interrupted.");
+                }
+            }
+        });
+
+        button10.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int sizeMB = 512; // 512MB block to encrypt/decrypt
+
+                    AESBenchmark.BenchmarkResult result = AESBenchmark.runBenchmark(sizeMB);
+
+                    String output = String.format(
+                            "AES Encryption Benchmark:\n" +
+                                    "-------------------------------\n" +
+                                    "Data Size         : %d MB\n" +
+                                    "Encryption Speed  : %.2f MB/s\n" +
+                                    "Decryption Speed  : %.2f MB/s",
+                            sizeMB,
+                            result.encryptSpeedMBs,
+                            result.decryptSpeedMBs
+                    );
+
+                    JOptionPane.showMessageDialog(null, output, "AES Encryption Benchmark Results", JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (OutOfMemoryError ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: Not enough memory to allocate data block!\nTry a smaller size.", "AES Benchmark Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage(), "AES Benchmark Error", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
         });
