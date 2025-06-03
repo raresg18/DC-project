@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 //import BenchmarkResult;
-
+import java.util.List;
 
 public class MainGUI {
 
@@ -58,6 +59,8 @@ public class MainGUI {
         JButton button6 = new JButton("FILE PROCESSING OPERATION");
         JButton button7 = new JButton("PRIME NUMBERS");
         JButton button8 = new JButton("RANDOM MATRIX OPERATION");
+        JButton button9 = new JButton("PRIME NUM - THREADS");
+
 
         // Set button sizes using setPreferredSize
         Dimension buttonSize = new Dimension(360, 40); // 80px wide and 30px tall
@@ -69,6 +72,7 @@ public class MainGUI {
         button6.setPreferredSize(buttonSize);
         button7.setPreferredSize(buttonSize);
         button8.setPreferredSize(buttonSize);
+        button9.setPreferredSize(buttonSize);
 
         // Set the minimum size for consistency
         button1.setMinimumSize(buttonSize);
@@ -79,9 +83,13 @@ public class MainGUI {
         button6.setMinimumSize(buttonSize);
         button7.setMinimumSize(buttonSize);
         button8.setMinimumSize(buttonSize);
+        button9.setMinimumSize(buttonSize);
+
 
         JTextField textField1 = new JTextField(20);
         JTextField textField2 = new JTextField(20);
+        JTextField threadCountField = new JTextField(20);
+
 
         JLabel resultLabel = new JLabel("Result: ");
         JLabel timeLabel = new JLabel("Time: ");
@@ -131,6 +139,11 @@ public class MainGUI {
         gbc.gridy = 3;
         gridPanel.add(button8, gbc);
 
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gridPanel.add(button9, gbc);
+
+
         // Panel for combo boxes (operations and iterations)
         JLabel label1 = new JLabel("Select Operation:");
         label1.setForeground(Color.BLACK);
@@ -157,10 +170,11 @@ public class MainGUI {
 
         // Centering the text fields and labels below the buttons
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(2, 2, 10, 10));
+        bottomPanel.setLayout(new GridLayout(3, 2, 10, 10));
         bottomPanel.setOpaque(false);
         bottomPanel.add(textField1);
         bottomPanel.add(textField2);
+        bottomPanel.add(threadCountField);
         bottomPanel.add(resultLabel);
         bottomPanel.add(timeLabel);
 
@@ -172,7 +186,7 @@ public class MainGUI {
         // Color all buttons
         Color buttonColor = new Color(70, 130, 180); // Steel Blue
         Color textColor = Color.WHITE;
-        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7, button8}) {
+        for (JButton button : new JButton[]{button1, button2, button3, button4, button5, button6, button7, button8,button9}) {
             button.setBackground(buttonColor);
             button.setForeground(textColor);
             button.setFocusPainted(false); // remove ugly focus
@@ -202,9 +216,7 @@ public class MainGUI {
 
         frame.setIconImage(new ImageIcon("C:\\Users\\ionut\\Desktop\\DC\\DC-project\\icon.png").getImage());
 
-
-
-      button1.addActionListener(new ActionListener() {
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -545,6 +557,60 @@ public class MainGUI {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        button9.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    long start = Long.parseLong(textField1.getText());
+                    long end = Long.parseLong(textField2.getText());
+                    int numThreads = Integer.parseInt(threadCountField.getText());
+
+                    if (start > end) {
+                        resultLabel.setText("Start must be <= end.");
+                        return;
+                    }
+
+                    long range = end - start + 1;
+                    long chunkSize = range / numThreads;
+                    List<PrimeThreaded.PrimeWorker> workers = new ArrayList<>();
+
+                    long startTime = System.nanoTime();
+
+                    for (int i = 0; i < numThreads; i++) {
+                        long chunkStart = start + i * chunkSize;
+                        long chunkEnd = (i == numThreads - 1) ? end : chunkStart + chunkSize - 1;
+                        PrimeThreaded.PrimeWorker worker = new PrimeThreaded.PrimeWorker(chunkStart, chunkEnd);
+                        workers.add(worker);
+                        worker.start();
+                    }
+
+                    List<Long> allPrimes = new ArrayList<>();
+                    for (PrimeThreaded.PrimeWorker worker : workers) {
+                        worker.join();
+                        allPrimes.addAll(worker.getPrimes());
+                    }
+
+                    long endTime = System.nanoTime();
+                    long durationNano = endTime - startTime;
+                    long durationMicro = durationNano / 1_000;
+                    long durationMilli = durationNano / 1_000_000;
+
+                    if (allPrimes.isEmpty()) {
+                        resultLabel.setText("No primes found.");
+                    } else {
+                        long lastPrime = allPrimes.get(allPrimes.size() - 1);
+                        resultLabel.setText("Total primes: " + allPrimes.size() + "   Last Prime: " + lastPrime);
+                    }
+
+                    timeLabel.setText("Runtime: " + durationMicro + " µs (" + durationMilli + " ms)");
+                } catch (NumberFormatException ex) {
+                    resultLabel.setText("Invalid number.");
+                } catch (InterruptedException ex) {
+                    resultLabel.setText("Thread interrupted.");
                 }
             }
         });
